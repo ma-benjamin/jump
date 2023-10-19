@@ -43,13 +43,9 @@ class Map {
         if (this.map[top_left[0]][top_left[1]] === 202 || 
             this.map[bot_left[0]][bot_left[1]] === 202) {
                 if( object.velocity.x < 0) {
-                    console.log(object.position)
-                    console.log(top_left)
-                    console.log("collided")
                     object.velocity.x = -1/2 * object.velocity.x
                     object.position.x = (top_left[1] + 1) * 16 + 0.01
                     object.bounce = true
-                    console.log(object.position)
                 }
         }
 
@@ -78,9 +74,13 @@ class Map {
         if (this.map[top_left[0]][top_left[1]] === 202 || 
             this.map[top_right[0]][top_right[1]] === 202) {
                 if( object.velocity.y < 0) {
-                    object.velocity.x = -1/2 * object.velocity.x
-                    object.position.x = top_left[0] * 16 + 0.01
+                    console.log(object.position)
+                    console.log(top_left)
+                    console.log("collided")
+                    object.velocity.y = -1/4 * object.velocity.y
+                    object.position.y = (top_left[0] + 1) * 16 + 0.01
                     this.bounce = true
+                    console.log(object.position)
                 }
         }
 

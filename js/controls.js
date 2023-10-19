@@ -45,11 +45,9 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('keyup', (event) => {
     switch (event.key) {
         case 'w':
+            if (player.velocity.y != 0) break
             keys.w.pressed = false
             power = player.charge / 3
-            console.log(power)
-            console.log(player.velocity.x)
-            console.log(player.bounce)
             if ( power < 32/3 ) {
                 player.velocity.y = -3/4 * power 
             } else {
