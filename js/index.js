@@ -24,7 +24,7 @@ function animate() {
     c.save()
     c.scale(4, 4)
 
-    map.update()
+    player.map.update()
 
     player.update()
     

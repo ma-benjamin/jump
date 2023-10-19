@@ -13,21 +13,19 @@ class Player {
         this.bounce = false
         this.gravity = 0.25
 
-        this.charge = 10
+        this.charge = 8
     }
 
     update() {
         this.draw()
         this.position.x += this.velocity.x
         this.horizontalCollisions()
-        if ( this.position.x >= 0 && this.position.x + this.width <= canvas.width / 4 &&
-             this.position.y >= 0 && this.position.x + this.height <= canvas.height / 4) {
+        if ( this.inBound() ) {
             this.map.horizontal_collisions(this)
         }
         this.applyGravity()
         this.verticalCollisions()
-        if ( this.position.x >= 0 && this.position.x + this.width <= canvas.width / 4 &&
-             this.position.y >= 0 && this.position.x + this.height <= canvas.height / 4) {
+        if ( this.inBound() ) {
             this.map.vertical_collisions(this)
         }
         this.chargeJump()
@@ -37,26 +35,26 @@ class Player {
 
     draw() {
         c.fillStyle = 'rgba(255, 0, 0, 1)'
-        if ( player.charge < 35) {
+        if ( player.charge < 10) {
             c.fillRect(this.position.x,
                 this.position.y,
                 this.width,
                 this.height)
-        } else if ( this.charge < 60 ) {
+        } else if ( this.charge < 20 ) {
             c.fillRect(this.position.x,
-                this.position.y + 10,
+                this.position.y + 8,
                 this.width,
-                this.height - 10)
+                this.height - 8)
         } else {
             c.fillRect(this.position.x,
-                this.position.y + 20,
+                this.position.y + 12,
                 this.width,
-                this.height - 20)
+                this.height - 12)
         }
     }
 
     chargeJump() {
-        if (keys.w.pressed && this.charge < 60) {
+        if (keys.w.pressed && this.charge < 60 && this.velocity.y == 0) {
             this.charge += 1
         }
     }
@@ -75,6 +73,11 @@ class Player {
         this.position.y += this.velocity.y
     }
 
+    inBound() {
+        return this.position.x >= 0 && this.position.x + this.width <= canvas.width / 4 &&
+        this.position.y >= 0 && this.position.y + this.height <= canvas.height / 4
+    }
+
     verticalCollisions() {
         // bottom of screen
         if ( this.position.y + this.height >= canvas.height / 4 ) {
@@ -87,7 +90,6 @@ class Player {
                 this.velocity.x = 0
                 this.bounce = false
                 this.position.y = canvas.height / 4 - this.height - 0.01
-                console.log(this.position)
             }
         }
 
@@ -114,5 +116,18 @@ class Player {
             this.position.x = canvas.width / 4 - this.width - 0.01
             this.bounce = true
         }
+    }
+
+    reset() {
+        this.position = {
+            x: 0,
+            y: 100
+        }
+        this.velocity = {
+            x: 0,
+            y: 0
+        },
+        this.bounce = 0
+        this.charge = 8
     }
 }
