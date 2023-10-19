@@ -38,9 +38,9 @@ window.addEventListener('keyup', (event) => {
             console.log(player.velocity.x)
             console.log(player.bounce)
             if ( power < 15 ) {
-                player.velocity.y = -2/5 * power 
+                player.velocity.y = -3/5 * power 
             } else {
-                player.velocity.y = -6
+                player.velocity.y = -9
             }
             player.charge = 10
             break

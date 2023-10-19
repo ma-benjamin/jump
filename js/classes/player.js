@@ -5,6 +5,7 @@ class Player {
             x: 0,
             y: 0
         }
+        this.map = map
 
         this.height = 30
         this.width = 30
@@ -19,9 +20,16 @@ class Player {
         this.draw()
         this.position.x += this.velocity.x
         this.horizontalCollisions()
+        if ( this.position.x >= 0 && this.position.x + this.width <= canvas.width / 4 &&
+             this.position.y >= 0 && this.position.x + this.height <= canvas.height / 4) {
+            this.map.horizontal_collisions(this)
+        }
         this.applyGravity()
         this.verticalCollisions()
-
+        if ( this.position.x >= 0 && this.position.x + this.width <= canvas.width / 4 &&
+             this.position.y >= 0 && this.position.x + this.height <= canvas.height / 4) {
+            this.map.vertical_collisions(this)
+        }
         this.chargeJump()
 
         if (!this.bounce) this.horizontalVelocity()
@@ -29,12 +37,12 @@ class Player {
 
     draw() {
         c.fillStyle = 'rgba(255, 0, 0, 1)'
-        if ( player.charge < 25) {
+        if ( player.charge < 35) {
             c.fillRect(this.position.x,
                 this.position.y,
                 this.width,
                 this.height)
-        } else if ( this.charge < 40 ) {
+        } else if ( this.charge < 60 ) {
             c.fillRect(this.position.x,
                 this.position.y + 10,
                 this.width,
@@ -79,10 +87,20 @@ class Player {
                 this.velocity.x = 0
                 this.bounce = false
                 this.position.y = canvas.height / 4 - this.height - 0.01
+                console.log(this.position)
             }
         }
 
-        // if ( this.position.y + this.height >= )
+        // top of screen
+        // if ( this.position.y <= 0 ) {
+        //     if (this.velocity.y < 0) {
+        //         this.velocity.y = -1 * this.velocity.y
+        //         this.velocity.x = 0
+        //         this.bounce = false
+        //         this.position.y = canvas.height / 4 - this.height - 0.01
+        //         console.log(this.position)
+        //     }
+        // }
     }
 
     horizontalCollisions() {
