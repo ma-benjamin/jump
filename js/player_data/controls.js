@@ -57,9 +57,11 @@ window.addEventListener('keyup', (event) => {
             break
         case 'a':
             keys.a.pressed = false
+            player.switchSprite('Idle')
             break
         case 'd':
             keys.d.pressed = false
+            player.switchSprite('Idle')
             break
     }
 })

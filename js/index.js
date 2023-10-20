@@ -13,7 +13,16 @@ const player = new Player({
         x: 0,
         y: 100,
     },
-    map: map
+    map: map,
+    imageSrc: './img/idle2.png',
+    frameRate: 4,
+    animations: {
+        Idle: {
+            imageSrc: './img/idle2.png',
+            frameRate: 4,
+            frameBuffer: 12,
+        },
+    }
 })
 
 function animate() {
