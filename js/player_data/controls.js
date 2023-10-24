@@ -22,9 +22,11 @@ window.addEventListener('keydown', (event) => {
             break
         case 'a':
             keys.a.pressed = true
+            player.lastDirection = 'left'
             break
         case 'd':
             keys.d.pressed = true
+            player.lastDirection = 'right'
             break
         case 'p':
             var ans = prompt("change map: ")
@@ -57,11 +59,9 @@ window.addEventListener('keyup', (event) => {
             break
         case 'a':
             keys.a.pressed = false
-            player.switchSprite('Idle')
             break
         case 'd':
             keys.d.pressed = false
-            player.switchSprite('Idle')
             break
     }
 })

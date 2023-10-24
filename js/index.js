@@ -14,15 +14,10 @@ const player = new Player({
         y: 100,
     },
     map: map,
-    imageSrc: './img/idle2.png',
+    imageSrc: './img/idle-right.png',
     frameRate: 4,
-    animations: {
-        Idle: {
-            imageSrc: './img/idle2.png',
-            frameRate: 4,
-            frameBuffer: 12,
-        },
-    }
+    animations: mushroom_animations,
+    static: false
 })
 
 function animate() {

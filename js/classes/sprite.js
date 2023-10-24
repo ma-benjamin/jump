@@ -1,5 +1,10 @@
 class Sprite {
-    constructor({position, imageSrc, frameRate = 1, frameBuffer = 8, scale = 1}) {
+    constructor({position, 
+                 imageSrc, 
+                 frameRate = 1, 
+                 frameBuffer = 12, 
+                 scale = 1, 
+                 still = false}) {
         this.position = position
         this.scale = scale
         this.loaded = false
@@ -14,6 +19,7 @@ class Sprite {
         this.currentFrame = 0
         this.frameBuffer = frameBuffer
         this.elapsedFrames = 0
+        this.still = still
     }
 
     draw() {
@@ -46,10 +52,14 @@ class Sprite {
 
     updateFrames() {
         this.elapsedFrames++
-
-        if (this.elapsedFrames % this.frameBuffer === 0) {
+        
+        if (this.elapsedFrames % this.frameBuffer === 0 && this.still == false) {
             if (this.currentFrame < this.frameRate - 1) this.currentFrame++
             else this.currentFrame = 0
         }
+    }
+
+    pushFrame() {
+        if (this.currentFrame < this.frameRate - 1) this.currentFrame++
     }
 }

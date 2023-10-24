@@ -25,9 +25,9 @@ class Player extends Sprite{
             image.src = this.animations[key].imageSrc
       
             this.animations[key].image = image
-      
         }
 
+        this.lastDirection = 'right'
         this.hitbox = {
             position: {
                 x: this.position.x + 22,
@@ -44,18 +44,18 @@ class Player extends Sprite{
 
 
         //show box
-        c.fillStyle = 'rgba(0, 0, 255, 0.2)'
-        c.fillRect(this.position.x,
-                    this.position.y,
-                    this.width,
-                    this.height)
+        // c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        // c.fillRect(this.position.x,
+        //             this.position.y,
+        //             this.width,
+        //             this.height)
 
         //show hitbox
-        c.fillStyle = 'rgba(255, 0, 0, 0.2)'
-        c.fillRect(this.hitbox.position.x,
-                    this.hitbox.position.y,
-                    this.hitbox.width,
-                    this.hitbox.height)
+        // c.fillStyle = 'rgba(255, 0, 0, 0.2)'
+        // c.fillRect(this.hitbox.position.x,
+        //             this.hitbox.position.y,
+        //             this.hitbox.width,
+        //             this.hitbox.height)
 
         this.draw()
         this.position.x += this.velocity.x
@@ -72,11 +72,17 @@ class Player extends Sprite{
             this.map.vertical_collisions(this)
         }
         
-        if (!this.inBound()) {
-            this.reset()
-        }
 
         this.chargeJump()
+
+        if ( player.charge > 10) {
+            if (player.lastDirection == 'left') player.switchSprite('JumpLeft')
+            else player.switchSprite('Jump')
+            
+        } else if (player.velocity.y === 0) {
+            if (player.lastDirection == 'left') player.switchSprite('IdleLeft')
+            else player.switchSprite('Idle')
+        }
 
         if (!this.bounce) this.horizontalVelocity()
     }
@@ -103,8 +109,9 @@ class Player extends Sprite{
 
     chargeJump() {
         if (keys.w.pressed && this.charge < 60 && this.velocity.y == 0) {
-            this.charge += 0.75
+            this.charge += 1
         }
+        if ((this.charge - 10) % 25 === 0) this.pushFrame()
     }
 
     horizontalVelocity() {
@@ -193,10 +200,11 @@ class Player extends Sprite{
 
     switchSprite(key) {
         if (this.image === this.animations[key].image || !this.loaded) return
-    
         this.currentFrame = 0
         this.image = this.animations[key].image
         this.frameRate = this.animations[key].frameRate
         this.frameBuffer = this.animations[key].frameBuffer
+        this.still = this.animations[key].still
+
     }
 }
