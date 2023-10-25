@@ -51,9 +51,10 @@ window.addEventListener('keyup', (event) => {
             keys.w.pressed = false
             power = player.charge / 3
             if ( power < 32/3 ) {
-                player.velocity.y = -3/4 * power 
+                player.velocity.y = -3/4 * power
             } else {
                 player.velocity.y = -8
+                player.switchSprite('FullJump')
             }
             player.charge = 8
             break

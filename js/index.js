@@ -2,7 +2,12 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 canvas.width = 1024
-canvas.height = 768
+canvas.height = 15 * 16
+
+const scaledCanvas = {
+    width: 1024,
+    height: 768
+}
 
 const map = new Map({
     map: map1
@@ -10,7 +15,7 @@ const map = new Map({
 
 const player = new Player({
     position: {
-        x: 0,
+        x: 20,
         y: 100,
     },
     map: map,
@@ -20,6 +25,13 @@ const player = new Player({
     static: false
 })
 
+const camera = {
+    position: {
+      x: 0,
+      y: -canvas.height + scaledCanvas.height,
+    }
+}
+
 function animate() {
     window.requestAnimationFrame(animate)
     c.fillStyle = 'white'
@@ -27,6 +39,7 @@ function animate() {
     
     c.save()
     c.scale(4, 4)
+    c.translate(camera.position.x, camera.position.y)
 
     player.map.update()
 

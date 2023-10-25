@@ -11,16 +11,40 @@ mushroom_animations = {
         frameBuffer: 12,
         still: false,
     },
-    Jump: {
-        imageSrc: './img/jump.png',
+    Charge: {
+        imageSrc: './img/charge.png',
         frameRate: 3,
         frameBuffer: 1,
         still: true,
     },
-    JumpLeft: {
-        imageSrc: './img/jump-left.png',
+    ChargeLeft: {
+        imageSrc: './img/charge-left.png',
         frameRate: 3,
         frameBuffer: 1,
         still: true,
+    }, 
+    FullJump: {
+        imageSrc: './img/full-jump.png',
+        frameRate: 4,
+        frameBuffer: 1,
+        still: true,
+    }, 
+    HalfJump: {
+        imageSrc: './img/half-jump.png',
+        frameRate: 3,
+        frameBuffer: 1,
+        still: true,        
+    },
+    Air: {
+        imageSrc: './img/air.png',
+        frameRate: 1,
+        frameBuffer: 1,
+        still: true, 
+    },
+    AirLeft: {
+        imageSrc: './img/air-left.png',
+        frameRate: 1,
+        frameBuffer: 1,
+        still: true, 
     },
 }

@@ -60,13 +60,11 @@ class Player extends Sprite{
         this.draw()
         this.position.x += this.velocity.x
         this.updateHitbox()
-        // this.horizontalCollisions()
         if ( this.inBound() ) {
             this.map.horizontal_collisions(this)
         }
         this.updateHitbox()
         this.applyGravity()
-        // this.verticalCollisions()
         this.updateHitbox()
         if ( this.inBound() ) {
             this.map.vertical_collisions(this)
@@ -76,12 +74,15 @@ class Player extends Sprite{
         this.chargeJump()
 
         if ( player.charge > 10) {
-            if (player.lastDirection == 'left') player.switchSprite('JumpLeft')
-            else player.switchSprite('Jump')
+            if (player.lastDirection == 'left') player.switchSprite('ChargeLeft')
+            else player.switchSprite('Charge')
             
         } else if (player.velocity.y === 0) {
             if (player.lastDirection == 'left') player.switchSprite('IdleLeft')
             else player.switchSprite('Idle')
+        } else if (player.velocity.y != 0) {
+            if (player.lastDirection == 'left') player.switchSprite('AirLeft')
+            else player.switchSprite('Air')
         }
 
         if (!this.bounce) this.horizontalVelocity()
@@ -133,47 +134,6 @@ class Player extends Sprite{
         this.hitbox.position.y >= 0 && this.hitbox.position.y + this.hitbox.height <= canvas.height / 4
     }
 
-    // verticalCollisions() {
-    //     // bottom of screen
-    //     if ( this.hitbox.position.y + this.hitbox.height >= canvas.height / 4 ) {
-    //         if (this.velocity.y > 3 && player.bounce) {
-    //             // bounce on the ground aftering falling too fast
-    //             this.velocity.y = -2/5 * this.velocity.y
-    //         } else if (this.velocity.y > 0) {
-    //             this.velocity.y = 0
-    //             this.velocity.x = 0
-    //             this.bounce = false
-    //             const offset = this.hitbox.position.y - this.position.y + this.hitbox.height
-    //             this.position.y = canvas.height / 4 - offset - 0.01
-    //         }
-    //     }
-
-    //     // top of screen
-    //     if ( this.position.y <= 0 ) {
-    //         if (this.velocity.y < 0) {
-    //             this.velocity.y = -1 * this.velocity.y
-    //             this.velocity.x = 0
-    //             this.bounce = false
-    //             this.position.y = canvas.height / 4 - this.height - 0.01
-    //             console.log(this.position)
-    //         }
-    //     }
-    // }
-
-
-    // horizontalCollisions() {
-    //     if(this.hitbox.position.x <= 0 && this.velocity.x < 0) {
-    //         this.velocity.x = -1/2 * this.velocity.x
-    //         this.position.x = 0.01
-    //         this.bounce = true
-    //     } else if (this.hitbox.position.x + this.width >= canvas.width / 4 &&
-    //                 this.velocity.x > 0) {
-    //         this.velocity.x = -1/2 * this.velocity.x
-    //         this.position.x = canvas.width / 4 - this.width - 0.01
-    //         this.bounce = true
-    //     }
-    // }
-
     reset() {
         this.position = {
             x: 0,
@@ -200,11 +160,17 @@ class Player extends Sprite{
 
     switchSprite(key) {
         if (this.image === this.animations[key].image || !this.loaded) return
+        if (key == "FullJump") console.log("jumped")
+        console.log(key)
         this.currentFrame = 0
         this.image = this.animations[key].image
         this.frameRate = this.animations[key].frameRate
         this.frameBuffer = this.animations[key].frameBuffer
         this.still = this.animations[key].still
 
+    }
+
+    jumping() {
+        this.pushFrame()
     }
 }
