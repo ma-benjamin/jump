@@ -44,6 +44,20 @@ function animate() {
     player.map.update()
 
     player.update()
+
+    if ( player.charge > 10) {
+        if (player.lastDirection == 'left') player.switchSprite('ChargeLeft')
+        else player.switchSprite('Charge')
+        
+    } else if (player.velocity.y === 0) {
+        if (player.lastDirection == 'left') player.switchSprite('IdleLeft')
+        else player.switchSprite('Idle')
+    } else if (player.velocity.y != 0) {
+        if (player.lastDirection == 'left') player.switchSprite('AirLeft')
+        else player.switchSprite('Air')
+        if (player.velocity.y > 0) player.panUp({ canvas, camera })
+        else player.panDown({ canvas, camera })
+    }
     
 
     c.restore()

@@ -36,6 +36,15 @@ class Player extends Sprite{
             width: 24,
             height: 23,
         }
+
+        this.camerabox= {
+            position: {
+                x: this.position.x - 50,
+                y: this.position.y,
+            },
+            width: 200,
+            height: 80,
+        }
     }
 
     update() {
@@ -73,40 +82,8 @@ class Player extends Sprite{
 
         this.chargeJump()
 
-        if ( player.charge > 10) {
-            if (player.lastDirection == 'left') player.switchSprite('ChargeLeft')
-            else player.switchSprite('Charge')
-            
-        } else if (player.velocity.y === 0) {
-            if (player.lastDirection == 'left') player.switchSprite('IdleLeft')
-            else player.switchSprite('Idle')
-        } else if (player.velocity.y != 0) {
-            if (player.lastDirection == 'left') player.switchSprite('AirLeft')
-            else player.switchSprite('Air')
-        }
-
         if (!this.bounce) this.horizontalVelocity()
     }
-
-    // draw() {
-    //     c.fillStyle = 'rgba(255, 0, 0, 1)'
-    //     if ( player.charge < 10) {
-    //         c.fillRect(this.position.x,
-    //             this.position.y,
-    //             this.width,
-    //             this.height)
-    //     } else if ( this.charge < 20 ) {
-    //         c.fillRect(this.position.x,
-    //             this.position.y + 8,
-    //             this.width,
-    //             this.height - 8)
-    //     } else {
-    //         c.fillRect(this.position.x,
-    //             this.position.y + 12,
-    //             this.width,
-    //             this.height - 12)
-    //     }
-    // }
 
     chargeJump() {
         if (keys.w.pressed && this.charge < 60 && this.velocity.y == 0) {
@@ -158,6 +135,34 @@ class Player extends Sprite{
         }
     }
 
+    updateCamerabox() {
+        this.camerabox= {
+          position: {
+            x: this.position.x - 50,
+            y: this.position.y,
+          },
+          width: 200,
+          height: 80,
+        }
+    }
+
+    panUp({canvas, camera}) {
+        if (this.camerabox.position.y + this.velocity.y >= 432) return
+
+        if (this.camerabox.position.y + this.camerabox.height >= 
+            canvas.height / 4 + Math.abs(camera.position.y)) {
+            camera.position.y -= this.velocity.y
+        }
+    }
+
+    panDown({canvas, camera}) {
+        if (this.camerabox.position.y + this.velocity.y <= 0) return
+
+        if (this.camerabox.position.y <= Math.abs(camera.position.y)) {
+          camera.position.y -= this.velocity.y
+        }
+    }
+
     switchSprite(key) {
         if (this.image === this.animations[key].image || !this.loaded) return
         if (key == "FullJump") console.log("jumped")
@@ -168,9 +173,5 @@ class Player extends Sprite{
         this.frameBuffer = this.animations[key].frameBuffer
         this.still = this.animations[key].still
 
-    }
-
-    jumping() {
-        this.pushFrame()
     }
 }
