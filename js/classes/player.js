@@ -39,18 +39,18 @@ class Player extends Sprite{
 
         this.camerabox= {
             position: {
-                x: this.position.x - 50,
-                y: this.position.y,
+                x: this.position.x,
+                y: this.position.y - 20,
             },
-            width: 200,
-            height: 80,
+            width: 1024,
+            height: 256,
         }
     }
 
     update() {
         this.updateFrames()
         this.updateHitbox()
-
+        this.updateCamerabox()
 
         //show box
         // c.fillStyle = 'rgba(0, 0, 255, 0.2)'
@@ -66,18 +66,21 @@ class Player extends Sprite{
         //             this.hitbox.width,
         //             this.hitbox.height)
 
+        // draws camera box
+        c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        c.fillRect(this.camerabox.position.x, 
+                   this.camerabox.position.y, 
+                   this.camerabox.width, 
+                   this.camerabox.height)
+
         this.draw()
         this.position.x += this.velocity.x
         this.updateHitbox()
-        if ( this.inBound() ) {
-            this.map.horizontal_collisions(this)
-        }
+        this.map.horizontal_collisions(this)
         this.updateHitbox()
         this.applyGravity()
         this.updateHitbox()
-        if ( this.inBound() ) {
-            this.map.vertical_collisions(this)
-        }
+        this.map.vertical_collisions(this)
         
 
         this.chargeJump()
@@ -138,16 +141,16 @@ class Player extends Sprite{
     updateCamerabox() {
         this.camerabox= {
           position: {
-            x: this.position.x - 50,
+            x: 0,
             y: this.position.y,
           },
-          width: 200,
-          height: 80,
+          width: canvas.width,
+          height: 100,
         }
     }
 
     panUp({canvas, camera}) {
-        if (this.camerabox.position.y + this.velocity.y >= 432) return
+        if (this.camerabox.position.y + this.camerabox.height + this.velocity.y >= 22 * 16) return
 
         if (this.camerabox.position.y + this.camerabox.height >= 
             canvas.height / 4 + Math.abs(camera.position.y)) {
@@ -156,10 +159,11 @@ class Player extends Sprite{
     }
 
     panDown({canvas, camera}) {
-        if (this.camerabox.position.y + this.velocity.y <= 0) return
-
+        if (this.camerabox.position.y + this.velocity.y <= 0) {
+            return
+        }
         if (this.camerabox.position.y <= Math.abs(camera.position.y)) {
-          camera.position.y -= this.velocity.y
+            camera.position.y -= this.velocity.y
         }
     }
 

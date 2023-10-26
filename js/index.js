@@ -2,11 +2,11 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 canvas.width = 1024
-canvas.height = 15 * 16
+canvas.height = 768
 
 const scaledCanvas = {
-    width: 1024,
-    height: 768
+    width: canvas.width / 4,
+    height: canvas.height / 4,
 }
 
 const map = new Map({
@@ -25,10 +25,12 @@ const player = new Player({
     static: false
 })
 
+const bkgimgh = 22 * 16
+
 const camera = {
     position: {
       x: 0,
-      y: -canvas.height + scaledCanvas.height,
+      y: -bkgimgh + scaledCanvas.height,
     }
 }
 
@@ -55,8 +57,12 @@ function animate() {
     } else if (player.velocity.y != 0) {
         if (player.lastDirection == 'left') player.switchSprite('AirLeft')
         else player.switchSprite('Air')
-        if (player.velocity.y > 0) player.panUp({ canvas, camera })
-        else player.panDown({ canvas, camera })
+        if (player.velocity.y > 0) {
+            player.panUp({ canvas, camera })
+            console.log("falling")
+        } else {
+            player.panDown({ canvas, camera })
+        }
     }
     
 

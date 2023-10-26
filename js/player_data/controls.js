@@ -41,6 +41,12 @@ window.addEventListener('keydown', (event) => {
                     map: map2
                 })
             }
+            break
+        case 'i':
+            console.log("Player Info:")
+            console.log("position: " + player.position.x + ", " + player.position.y)
+            console.log("velocity: " + player.velocity.x + ", " + player.velocity.y)
+            break
     }
   })
   
