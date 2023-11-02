@@ -40,10 +40,10 @@ class Player extends Sprite{
         this.camerabox= {
             position: {
                 x: this.position.x,
-                y: this.position.y - 20,
+                y: this.position.y - 10,
             },
             width: 1024,
-            height: 256,
+            height: 100,
         }
     }
 
@@ -76,11 +76,11 @@ class Player extends Sprite{
         this.draw()
         this.position.x += this.velocity.x
         this.updateHitbox()
-        this.map.horizontal_collisions(this)
+        if ( this.position.y >= 0 ) this.map.horizontal_collisions(this)
         this.updateHitbox()
         this.applyGravity()
         this.updateHitbox()
-        this.map.vertical_collisions(this)
+        if ( this.position.y >= 0 ) this.map.vertical_collisions(this)
         
 
         this.chargeJump()
@@ -92,7 +92,7 @@ class Player extends Sprite{
         if (keys.w.pressed && this.charge < 60 && this.velocity.y == 0) {
             this.charge += 1
         }
-        if ((this.charge - 10) % 25 === 0) this.pushFrame()
+        if ((this.charge - 10) % 24 === 0) this.pushFrame()
     }
 
     horizontalVelocity() {
@@ -142,15 +142,15 @@ class Player extends Sprite{
         this.camerabox= {
           position: {
             x: 0,
-            y: this.position.y,
+            y: this.position.y - 20,
           },
           width: canvas.width,
-          height: 100,
+          height: 80,
         }
     }
 
     panUp({canvas, camera}) {
-        if (this.camerabox.position.y + this.camerabox.height + this.velocity.y >= 22 * 16) return
+        if (this.camerabox.position.y + this.camerabox.height + this.velocity.y >= this.map.walls.length * 16) return
 
         if (this.camerabox.position.y + this.camerabox.height >= 
             canvas.height / 4 + Math.abs(camera.position.y)) {
@@ -167,10 +167,8 @@ class Player extends Sprite{
         }
     }
 
-    switchSprite(key) {
+    switchSprite(key, reset) {
         if (this.image === this.animations[key].image || !this.loaded) return
-        if (key == "FullJump") console.log("jumped")
-        console.log(key)
         this.currentFrame = 0
         this.image = this.animations[key].image
         this.frameRate = this.animations[key].frameRate
