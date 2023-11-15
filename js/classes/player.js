@@ -67,11 +67,11 @@ class Player extends Sprite{
         //             this.hitbox.height)
 
         // draws camera box
-        c.fillStyle = 'rgba(0, 0, 255, 0.2)'
-        c.fillRect(this.camerabox.position.x, 
-                   this.camerabox.position.y, 
-                   this.camerabox.width, 
-                   this.camerabox.height)
+        // c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        // c.fillRect(this.camerabox.position.x, 
+        //            this.camerabox.position.y, 
+        //            this.camerabox.width, 
+        //            this.camerabox.height)
 
         this.draw()
         this.position.x += this.velocity.x
@@ -81,6 +81,7 @@ class Player extends Sprite{
         this.applyGravity()
         this.updateHitbox()
         if ( this.position.y >= 0 ) this.map.vertical_collisions(this)
+        this.map.slope_vertical_collusion(this)
         
 
         this.chargeJump()
@@ -150,7 +151,7 @@ class Player extends Sprite{
     }
 
     panUp({canvas, camera}) {
-        if (this.camerabox.position.y + this.camerabox.height + this.velocity.y >= this.map.walls.length * 16) return
+        if (this.camerabox.position.y + this.camerabox.height + this.velocity.y >= this.map.map.length * 16) return
 
         if (this.camerabox.position.y + this.camerabox.height >= 
             canvas.height / 4 + Math.abs(camera.position.y)) {
@@ -167,7 +168,7 @@ class Player extends Sprite{
         }
     }
 
-    switchSprite(key, reset) {
+    switchSprite(key) {
         if (this.image === this.animations[key].image || !this.loaded) return
         this.currentFrame = 0
         this.image = this.animations[key].image

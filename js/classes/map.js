@@ -1,35 +1,76 @@
 class Map {
-    constructor({walls, platforms}) {
-        this.walls = walls
-        this.platforms = platforms
+    constructor({map}) {
+        this.map = map
         this.blocks = []
-
-        walls.forEach((row, y) => {
+        this.slopes = []
+        console.log(map)
+        map.forEach((row, y) => {
             row.forEach((symbol, x) => {
-                if (symbol === 202) {
-                    this.blocks.push( 
-                        new Block ({
-                            position: {
-                                x: 16 * x,
-                                y: 16 * y,
-                            }
-                        })
-                    )
-                }
-            })
-        })
-
-        platforms.forEach((row, y) => {
-            row.forEach((symbol, x) => {
-                if (symbol === 202) {
-                    this.blocks.push( 
-                        new Platform ({
-                            position: {
-                                x: 16 * x,
-                                y: 16 * y,
-                            }
-                        })
-                    )
+                switch (symbol) {
+                    case 200:
+                        this.blocks.push( 
+                            new Block ({
+                                position: {
+                                    x: 16 * x,
+                                    y: 16 * y,
+                                }
+                            })
+                        )
+                        break
+                    case 201:
+                        this.blocks.push( 
+                            new Platform ({
+                                position: {
+                                    x: 16 * x,
+                                    y: 16 * y,
+                                }
+                            })
+                        )
+                        break
+                    case 202:
+                        this.slopes.push( 
+                            new Slope ({
+                                position: {
+                                    x: 16 * x,
+                                    y: 16 * y,
+                                },
+                                corner: 'topL'
+                            })
+                        )
+                        break
+                    case 203:
+                        this.slopes.push( 
+                            new Slope ({
+                                position: {
+                                    x: 16 * x,
+                                    y: 16 * y,
+                                },
+                                corner: 'topR'
+                            })
+                        )
+                        break
+                    case 204:
+                        this.slopes.push( 
+                            new Slope ({
+                                position: {
+                                    x: 16 * x,
+                                    y: 16 * y,
+                                },
+                                corner: 'botR'
+                            })
+                        )
+                        break
+                    case 205:
+                        this.slopes.push( 
+                            new Slope ({
+                                position: {
+                                    x: 16 * x,
+                                    y: 16 * y,
+                                },
+                                corner: 'botL'
+                            })
+                        )
+                        break
                 }
             })
         })
@@ -39,6 +80,9 @@ class Map {
         this.blocks.forEach((block) => {
             block.draw()
         })
+        this.slopes.forEach((slope) => {
+            slope.draw()
+        })
     }
 
     update() {
@@ -46,69 +90,57 @@ class Map {
     }
 
     horizontal_collisions(object) {
-        var bot_left = [Math.floor((object.hitbox.position.y + object.hitbox.height) / 16),
-                        Math.floor(object.hitbox.position.x / 16)]
-        var bot_right = [Math.floor((object.hitbox.position.y + object.hitbox.height) / 16),
-                         Math.floor((object.hitbox.position.x + object.hitbox.width) / 16)]
-        var top_left = [Math.floor((object.hitbox.position.y) / 16),
-                         Math.floor(object.hitbox.position.x / 16)]
-        var top_right = [Math.floor((object.hitbox.position.y) / 16),
-                          Math.floor((object.hitbox.position.x + object.hitbox.width) / 16)]
-        
+        const topside = Math.floor((object.hitbox.position.y) / 16)
+        const leftside = Math.floor(object.hitbox.position.x / 16)
+        const rightside = Math.floor((object.hitbox.position.x + object.hitbox.width) / 16)
+        const botside = Math.floor((object.hitbox.position.y + object.hitbox.height) / 16)
+
         // left side collision
-        if (this.walls[top_left[0]][top_left[1]] === 202 || 
-            this.walls[bot_left[0]][bot_left[1]] === 202) {
+        if (this.map[topside][leftside] === 200 || 
+            this.map[botside][leftside] === 200) {
                 if( object.velocity.x < 0) {
                     const offset = object.hitbox.position.x - object.position.x
                     object.velocity.x = -1/2 * object.velocity.x
-                    object.position.x = (top_left[1] + 1) * 16 - offset + 0.01
+                    object.position.x = (leftside + 1) * 16 - offset + 0.01
                     object.bounce = true
-                    console.log("left: " + top_left)
-                    console.log(top_right)
                 }
         }
 
         // right side collision
-        if (this.walls[top_right[0]][top_right[1]] === 202 || 
-            this.walls[bot_right[0]][bot_right[1]] === 202) {
+        if (this.map[topside][rightside] === 200 || 
+            this.map[botside][rightside] === 200) {
                 if( object.velocity.x > 0) {
                     const offset = object.hitbox.position.x - object.position.x + object.hitbox.width
 
                     object.velocity.x = -1/2 * object.velocity.x
-                    object.position.x = top_right[1] * 16 - offset - 0.01
+                    object.position.x = rightside * 16 - offset - 0.01
                     object.bounce = true
-                    console.log("Right:" + top_right)
-                    console.log(bot_right)
                 }
         }
     }
 
     vertical_collisions(object) {
-        var bot_left = [Math.floor((object.hitbox.position.y + object.hitbox.height) / 16),
-                        Math.floor(object.hitbox.position.x / 16)]
-        var bot_right = [Math.floor((object.hitbox.position.y + object.hitbox.height) / 16),
-                         Math.floor((object.hitbox.position.x + object.hitbox.width) / 16)]
-        var top_left = [Math.floor((object.hitbox.position.y) / 16),
-                        Math.floor(object.hitbox.position.x / 16)]
-        var top_right = [Math.floor((object.hitbox.position.y) / 16),
-                         Math.floor((object.hitbox.position.x + object.hitbox.width) / 16)]
-
-        // top side walls
-        if (this.walls[top_left[0]][top_left[1]] === 202 || 
-            this.walls[top_right[0]][top_right[1]] === 202) {
+        const topside = Math.floor((object.hitbox.position.y) / 16)
+        const leftside = Math.floor(object.hitbox.position.x / 16)
+        const rightside = Math.floor((object.hitbox.position.x + object.hitbox.width) / 16)
+        const botside = Math.floor((object.hitbox.position.y + object.hitbox.height) / 16)
+        
+        // top side
+        if (this.map[topside][leftside] === 200 || 
+            this.map[topside][rightside] === 200) {
                 if( object.velocity.y < 0) {
                     object.velocity.y = -1/4 * object.velocity.y
                     const offset = object.hitbox.position.y - object.position.y
-                    object.position.y = (top_left[0] + 1) * 16 - offset + 0.01
+                    object.position.y = (topside + 1) * 16 - offset + 0.01
                     this.bounce = true
                 }
         }
 
-        // bottom side walls
-        if (this.walls[bot_left[0]][bot_left[1]] === 202 || 
-            this.walls[bot_right[0]][bot_right[1]] === 202) {
+        // bottom side
+        if (this.map[botside][leftside] === 200 || 
+            this.map[botside][rightside] === 200) {
             const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
-            object.position.y = bot_left[0] * 16 - offset - 0.01
+            object.position.y = botside * 16 - offset - 0.01
             if (object.velocity.y > 4) {
                 object.velocity.y = -1/5 * object.velocity.y
                 object.bounce = true
@@ -120,19 +152,46 @@ class Map {
         }
 
         // bottom side platforms
-        if (this.platforms[bot_left[0]][bot_left[1]] === 202 || 
-            this.platforms[bot_right[0]][bot_right[1]] === 202) {
+        if (this.map[botside][leftside] === 201 || 
+            this.map[botside][rightside] === 201) {
             const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
             if (object.velocity.y > 4) {
-                object.position.y = bot_left[0] * 16 - offset - 0.01
+                object.position.y = botside * 16 - offset - 0.01
                 object.velocity.y = -1/5 * object.velocity.y
                 object.bounce = true
             } else if (object.velocity.y > 0) {
-                object.position.y = bot_left[0] * 16 - offset - 0.01
+                object.position.y = botside * 16 - offset - 0.01
                 object.velocity.y = 0
                 object.velocity.x = 0
                 object.bounce = false
             } 
+        }
+    }
+
+    slope_vertical_collusion(object) {
+        for (let i = 0; i < this.slopes.length; i++) {
+            const slope = this.slopes[i]
+
+            if (collision({object1: object.hitbox, object2: slope})) {
+                if (object.velocity.y > 0) {
+                    object.bounce = true
+                    // object.velocity.y = 1/2 * object.velocity.y
+                    if ( slope.corner === 'topR' ) {
+                        object.velocity.x = -1 * object.velocity.y
+                    } else if ( slope.corner === 'topL' ) {
+                        object.velocity.x = object.velocity.y
+                    }
+                } else if (object.velocity.y > 0) {
+                    object.bounce = true
+                    console.log('slide down')
+                    object.velocity.y = 1/2 * object.velocity.y
+                    if ( slope.corner === 'botL' ) {
+                        object.velocity.x = object.velocity.y
+                    } else if ( slope.corner === 'botR' ) {
+                        object.velocity.x = -1 * object.velocity.y
+                    }
+                }
+            }
         }
     }
 }

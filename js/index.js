@@ -2,7 +2,7 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 canvas.width = 1024
-canvas.height = (walls.length + 18) * 16
+canvas.height = (forest_map.length + 18) * 16
 
 const scaledCanvas = {
     width: canvas.width / 4,
@@ -10,13 +10,12 @@ const scaledCanvas = {
 }
 
 const map = new Map({
-    walls: walls,
-    platforms: platforms
+    map: forest_map
 })
 
 const player = new Player({
     position: {
-        x: 20,
+        x: 30,
         y: 450,
     },
     map: map,
@@ -26,7 +25,7 @@ const player = new Player({
     static: false
 })
 
-const bkgimgh = 16 * walls.length
+const bkgimgh = 16 * forest_map.length
 
 const camera = {
     position: {
@@ -58,15 +57,15 @@ function animate() {
     player.update()
 
     if ( player.charge > 8) {
-        if (player.lastDirection == 'left') player.switchSprite('ChargeLeft', false)
-        else player.switchSprite('Charge', false)
+        if (player.lastDirection == 'left') player.switchSprite('ChargeLeft')
+        else player.switchSprite('Charge')
         
     } else if (player.velocity.y === 0) {
-        if (player.lastDirection == 'left') player.switchSprite('IdleLeft', true)
-        else player.switchSprite('Idle', true)
+        if (player.lastDirection == 'left') player.switchSprite('IdleLeft')
+        else player.switchSprite('Idle')
     } else if (player.velocity.y != 0) {
-        if (player.lastDirection == 'left') player.switchSprite('AirLeft', true)
-        else player.switchSprite('Air', true)
+        if (player.lastDirection == 'left') player.switchSprite('AirLeft')
+        else player.switchSprite('Air')
         if (player.velocity.y > 0) {
             player.panUp({ canvas, camera })
             console.log("falling")
@@ -79,9 +78,6 @@ function animate() {
     c.restore()
 }
 
+console.log(forest_map)
 
-console.log(walls.length)
-console.log(walls[0].length)
-console.log(platforms.length)
-console.log(platforms[0].length)
 animate()
