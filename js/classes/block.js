@@ -70,4 +70,17 @@ class Slope {
         }
 
     }
+
+    slope_height(object) {
+        switch (this.corner) {            
+            case 'topL':
+                return -object.position.x + this.position.y + this.position.x + this.height
+            case 'topR':
+                return object.position.x + object.width + this.position.y - this.position.x
+            case 'botL':
+                return object.position.x + this.position.y - this.position.x
+            case'botR':
+                return -(object.position.x + object.width) + this.position.y + this.position.x + this.height
+        }
+    }
 }

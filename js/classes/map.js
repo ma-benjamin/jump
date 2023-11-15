@@ -172,24 +172,37 @@ class Map {
         for (let i = 0; i < this.slopes.length; i++) {
             const slope = this.slopes[i]
 
-            if (collision({object1: object.hitbox, object2: slope})) {
-                if (object.velocity.y > 0) {
+            if (slope_collision({object1: object.hitbox, object2: slope})) {
+                // console.log(object.velocity.y)
+                // console.log(slope.corner)
+                // console.log(object.position)
+                // console.log(slope.position)
+                // console.log(slope.slope_height(object))
+                if (object.velocity.y < 0) {
                     object.bounce = true
-                    // object.velocity.y = 1/2 * object.velocity.y
                     if ( slope.corner === 'topR' ) {
-                        object.velocity.x = -1 * object.velocity.y
-                    } else if ( slope.corner === 'topL' ) {
                         object.velocity.x = object.velocity.y
+                        const offset = object.hitbox.position.y - object.position.y
+                        object.position.y = slope.slope_height(object.hitbox) - offset + 0.01
+                    } else if ( slope.corner === 'topL' ) {
+                        object.velocity.x = -object.velocity.y
+                        const offset = object.hitbox.position.y - object.position.y
+                        object.position.y = slope.slope_height(object.hitbox) - offset + 0.01
                     }
+                    object.velocity.y = 0
                 } else if (object.velocity.y > 0) {
                     object.bounce = true
                     console.log('slide down')
-                    object.velocity.y = 1/2 * object.velocity.y
                     if ( slope.corner === 'botL' ) {
-                        object.velocity.x = object.velocity.y
+                        object.velocity.x = 0.8 * object.velocity.y
+                        const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
+                        object.position.y = slope.slope_height(object.hitbox) - offset - 0.01
                     } else if ( slope.corner === 'botR' ) {
-                        object.velocity.x = -1 * object.velocity.y
+                        object.velocity.x = -0.8 * object.velocity.y
+                        const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
+                        object.position.y = slope.slope_height(object.hitbox) - offset - 0.01
                     }
+                    object.velocity.y = 0
                 }
             }
         }
