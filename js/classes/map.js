@@ -7,7 +7,7 @@ class Map {
         map.forEach((row, y) => {
             row.forEach((symbol, x) => {
                 switch (symbol) {
-                    case 200:
+                    case 576:
                         this.blocks.push( 
                             new Block ({
                                 position: {
@@ -17,7 +17,7 @@ class Map {
                             })
                         )
                         break
-                    case 201:
+                    case 577:
                         this.blocks.push( 
                             new Platform ({
                                 position: {
@@ -27,7 +27,7 @@ class Map {
                             })
                         )
                         break
-                    case 202:
+                    case 578:
                         this.slopes.push( 
                             new Slope ({
                                 position: {
@@ -38,7 +38,7 @@ class Map {
                             })
                         )
                         break
-                    case 203:
+                    case 579:
                         this.slopes.push( 
                             new Slope ({
                                 position: {
@@ -49,7 +49,7 @@ class Map {
                             })
                         )
                         break
-                    case 204:
+                    case 581:
                         this.slopes.push( 
                             new Slope ({
                                 position: {
@@ -60,7 +60,7 @@ class Map {
                             })
                         )
                         break
-                    case 205:
+                    case 580:
                         this.slopes.push( 
                             new Slope ({
                                 position: {
@@ -96,8 +96,8 @@ class Map {
         const botside = Math.floor((object.hitbox.position.y + object.hitbox.height) / 16)
 
         // left side collision
-        if (this.map[topside][leftside] === 200 || 
-            this.map[botside][leftside] === 200) {
+        if (this.map[topside][leftside] === 576 || 
+            this.map[botside][leftside] === 576) {
                 if( object.velocity.x < 0) {
                     const offset = object.hitbox.position.x - object.position.x
                     object.velocity.x = -1/2 * object.velocity.x
@@ -107,8 +107,8 @@ class Map {
         }
 
         // right side collision
-        if (this.map[topside][rightside] === 200 || 
-            this.map[botside][rightside] === 200) {
+        if (this.map[topside][rightside] === 576 || 
+            this.map[botside][rightside] === 576) {
                 if( object.velocity.x > 0) {
                     const offset = object.hitbox.position.x - object.position.x + object.hitbox.width
 
@@ -126,8 +126,8 @@ class Map {
         const botside = Math.floor((object.hitbox.position.y + object.hitbox.height) / 16)
         
         // top side
-        if (this.map[topside][leftside] === 200 || 
-            this.map[topside][rightside] === 200) {
+        if (this.map[topside][leftside] === 576 || 
+            this.map[topside][rightside] === 576) {
                 if( object.velocity.y < 0) {
                     object.velocity.y = -1/4 * object.velocity.y
                     const offset = object.hitbox.position.y - object.position.y
@@ -137,8 +137,8 @@ class Map {
         }
 
         // bottom side
-        if (this.map[botside][leftside] === 200 || 
-            this.map[botside][rightside] === 200) {
+        if (this.map[botside][leftside] === 576 || 
+            this.map[botside][rightside] === 576) {
             const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
             object.position.y = botside * 16 - offset - 0.01
             if (object.velocity.y > 4) {
@@ -152,8 +152,8 @@ class Map {
         }
 
         // bottom side platforms
-        if (this.map[botside][leftside] === 201 || 
-            this.map[botside][rightside] === 201) {
+        if (this.map[botside][leftside] === 577 || 
+            this.map[botside][rightside] === 577) {
             const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
             if (object.velocity.y > 4) {
                 object.position.y = botside * 16 - offset - 0.01

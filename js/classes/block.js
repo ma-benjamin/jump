@@ -20,7 +20,7 @@ class Platform {
 
     draw() {
         c.fillStyle = 'rgba(0, 255, 0, 0.5)'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.fillRect(this.position.x, this.position.y, this.width, this.height/2)
     }
 }
 

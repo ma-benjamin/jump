@@ -2,7 +2,7 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 canvas.width = 1024
-canvas.height = (forest_map.length + 18) * 16
+canvas.height = (forest_map.length + 8) * 16
 
 const scaledCanvas = {
     width: canvas.width / 4,
@@ -16,7 +16,7 @@ const map = new Map({
 const player = new Player({
     position: {
         x: 30,
-        y: 450,
+        y: 600,
     },
     map: map,
     imageSrc: './img/mushroom/idle-right.png',
@@ -39,7 +39,7 @@ const background = new Sprite({
         x: 0,
         y: 0
     },
-    imageSrc: './img/1.png'
+    imageSrc: './img/forest_map.png'
 })
 
 function animate() {
@@ -68,14 +68,23 @@ function animate() {
         else player.switchSprite('Air')
         if (player.velocity.y > 0) {
             player.panUp({ canvas, camera })
-            console.log("falling")
         } else {
             player.panDown({ canvas, camera })
         }
     }
     
-
     c.restore()
+
+    if (player.position.x > 60 && player.position.y < 189 && player.position.x < 160) {
+        c.font = "30px Comic Sans MS";
+        c.fillStyle = "white";
+        c.textAlign = "center";
+        c.fillText("You Win!", canvas.width/2, canvas.height/4);
+        return
+    }
+    
+
+    
 }
 
 console.log(forest_map)

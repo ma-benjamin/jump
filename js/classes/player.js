@@ -80,8 +80,9 @@ class Player extends Sprite{
         this.updateHitbox()
         this.applyGravity()
         this.updateHitbox()
-        if ( this.position.y >= 0 ) this.map.vertical_collisions(this)
         this.map.slope_vertical_collusion(this)
+        if ( this.position.y >= 0 ) this.map.vertical_collisions(this)
+        
         
 
         this.chargeJump()
