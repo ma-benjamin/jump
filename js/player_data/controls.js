@@ -38,8 +38,9 @@ window.addEventListener('keydown', (event) => {
             } else if (ans == "2") {
                 console.log("changed to map2")
                 player.map = new Map({
-                    map: map2
+                    map: level2.map
                 })
+                background = level2.image
             }
             break
         case 'i':
@@ -59,7 +60,7 @@ window.addEventListener('keyup', (event) => {
             if ( power < 6 ) {
                 player.velocity.y = -1 * power
             } else {
-                player.velocity.y = -7
+                player.velocity.y = -6
             }
             player.charge = 8
             break

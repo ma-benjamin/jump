@@ -1,13 +1,16 @@
 class Map {
-    constructor({map}) {
-        this.map = map
+    constructor({map, width = 16, finish}) {
+        this.map = []
         this.blocks = []
         this.slopes = []
-        console.log(map)
-        map.forEach((row, y) => {
+        for (let i = 0; i < map.length; i += width) {
+            this.map.push(map.slice(i, i + width))
+        }
+        this.finish_bounds = finish
+        this.map.forEach((row, y) => {
             row.forEach((symbol, x) => {
                 switch (symbol) {
-                    case 576:
+                    case 200:
                         this.blocks.push( 
                             new Block ({
                                 position: {
@@ -17,7 +20,7 @@ class Map {
                             })
                         )
                         break
-                    case 577:
+                    case 201:
                         this.blocks.push( 
                             new Platform ({
                                 position: {
@@ -27,7 +30,7 @@ class Map {
                             })
                         )
                         break
-                    case 578:
+                    case 202:
                         this.slopes.push( 
                             new Slope ({
                                 position: {
@@ -38,7 +41,7 @@ class Map {
                             })
                         )
                         break
-                    case 579:
+                    case 203:
                         this.slopes.push( 
                             new Slope ({
                                 position: {
@@ -49,18 +52,7 @@ class Map {
                             })
                         )
                         break
-                    case 581:
-                        this.slopes.push( 
-                            new Slope ({
-                                position: {
-                                    x: 16 * x,
-                                    y: 16 * y,
-                                },
-                                corner: 'botR'
-                            })
-                        )
-                        break
-                    case 580:
+                    case 204:
                         this.slopes.push( 
                             new Slope ({
                                 position: {
@@ -68,6 +60,17 @@ class Map {
                                     y: 16 * y,
                                 },
                                 corner: 'botL'
+                            })
+                        )
+                        break
+                    case 205:
+                        this.slopes.push( 
+                            new Slope ({
+                                position: {
+                                    x: 16 * x,
+                                    y: 16 * y,
+                                },
+                                corner: 'botR'
                             })
                         )
                         break
@@ -96,8 +99,8 @@ class Map {
         const botside = Math.floor((object.hitbox.position.y + object.hitbox.height) / 16)
 
         // left side collision
-        if (this.map[topside][leftside] === 576 || 
-            this.map[botside][leftside] === 576) {
+        if (this.map[topside][leftside] === 200 || 
+            this.map[botside][leftside] === 200) {
                 if( object.velocity.x < 0) {
                     const offset = object.hitbox.position.x - object.position.x
                     object.velocity.x = -1/2 * object.velocity.x
@@ -107,8 +110,8 @@ class Map {
         }
 
         // right side collision
-        if (this.map[topside][rightside] === 576 || 
-            this.map[botside][rightside] === 576) {
+        if (this.map[topside][rightside] === 200 || 
+            this.map[botside][rightside] === 200) {
                 if( object.velocity.x > 0) {
                     const offset = object.hitbox.position.x - object.position.x + object.hitbox.width
 
@@ -126,8 +129,8 @@ class Map {
         const botside = Math.floor((object.hitbox.position.y + object.hitbox.height) / 16)
         
         // top side
-        if (this.map[topside][leftside] === 576 || 
-            this.map[topside][rightside] === 576) {
+        if (this.map[topside][leftside] === 200 || 
+            this.map[topside][rightside] === 200) {
                 if( object.velocity.y < 0) {
                     object.velocity.y = -1/4 * object.velocity.y
                     const offset = object.hitbox.position.y - object.position.y
@@ -137,11 +140,11 @@ class Map {
         }
 
         // bottom side
-        if (this.map[botside][leftside] === 576 || 
-            this.map[botside][rightside] === 576) {
+        if (this.map[botside][leftside] === 200 || 
+            this.map[botside][rightside] === 200) {
             const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
             object.position.y = botside * 16 - offset - 0.01
-            if (object.velocity.y > 4) {
+            if (object.velocity.y > 5) {
                 object.velocity.y = -1/5 * object.velocity.y
                 object.bounce = true
             } else if (object.velocity.y > 0) {
@@ -152,9 +155,12 @@ class Map {
         }
 
         // bottom side platforms
-        if (this.map[botside][leftside] === 577 || 
-            this.map[botside][rightside] === 577) {
+        if (this.map[botside][leftside] === 201 || 
+            this.map[botside][rightside] === 201) {
             const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
+            if (object.hitbox.position.y + object.hitbox.height > botside * 16 + 8) {
+                    return
+                }
             if (object.velocity.y > 4) {
                 object.position.y = botside * 16 - offset - 0.01
                 object.velocity.y = -1/5 * object.velocity.y
@@ -192,7 +198,6 @@ class Map {
                     object.velocity.y = 0
                 } else if (object.velocity.y > 0) {
                     object.bounce = true
-                    console.log('slide down')
                     if ( slope.corner === 'botL' ) {
                         object.velocity.x = 0.8 * object.velocity.y
                         const offset = object.hitbox.position.y - object.position.y + object.hitbox.height
@@ -207,4 +212,10 @@ class Map {
             }
         }
     }
+
+    finished(object) {
+        
+    }
+
+
 }

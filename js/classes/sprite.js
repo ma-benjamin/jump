@@ -63,6 +63,5 @@ class Sprite {
         if (this.currentFrame < this.frameRate - 1) {
             this.currentFrame++
         }
-        console.log(this.currentFrame)
     }
 }

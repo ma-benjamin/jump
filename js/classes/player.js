@@ -43,7 +43,7 @@ class Player extends Sprite{
                 y: this.position.y - 10,
             },
             width: 1024,
-            height: 100,
+            height: 160,
         }
     }
 
@@ -81,9 +81,9 @@ class Player extends Sprite{
         this.applyGravity()
         this.updateHitbox()
         this.map.slope_vertical_collusion(this)
+        this.updateHitbox()
         if ( this.position.y >= 0 ) this.map.vertical_collisions(this)
-        
-        
+        this.updateHitbox()
 
         this.chargeJump()
 
@@ -94,7 +94,7 @@ class Player extends Sprite{
         if (keys.w.pressed && this.charge < 60 && this.velocity.y == 0) {
             this.charge += 1
         }
-        if ((this.charge - 10) % 24 === 0) this.pushFrame()
+        if ((this.charge - 7) % 20 === 0) this.pushFrame()
     }
 
     horizontalVelocity() {
@@ -169,13 +169,28 @@ class Player extends Sprite{
         }
     }
 
+    panHorizontal({canvas, camera}) {
+        const center = this.hitbox.position.x + this.hitbox.width / 2
+        if (Math.floor(center / 256) == Math.floor(camera.x / 256)) return
+        camera.position.x = -256 * Math.floor(center / 256)
+    }
+
     switchSprite(key) {
         if (this.image === this.animations[key].image || !this.loaded) return
-        this.currentFrame = 0
+        if (this.charge < 10) this.currentFrame = 0
         this.image = this.animations[key].image
         this.frameRate = this.animations[key].frameRate
         this.frameBuffer = this.animations[key].frameBuffer
         this.still = this.animations[key].still
+    }
 
+    switchMap(key) {
+        if (current_map ==  maps[key]) return
+        current_map = maps[key]
+        background = current_map.image
+        this.position = current_map.start_position
+        level = current_map.map
+        this.map = level
+        camera.position.y = -16 * level.map.length + scaledCanvas.height
     }
 }

@@ -1,46 +1,36 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-canvas.width = 1024
-canvas.height = (forest_map.length + 8) * 16
+let current_map = maps['level3']
 
-const scaledCanvas = {
-    width: canvas.width / 4,
-    height: canvas.height / 4,
-}
-
-const map = new Map({
-    map: forest_map
-})
+let level = current_map.map
 
 const player = new Player({
-    position: {
-        x: 30,
-        y: 600,
-    },
-    map: map,
+    position: current_map.start_position,
+    map: level,
     imageSrc: './img/mushroom/idle-right.png',
     frameRate: 4,
     animations: mushroom_animations,
     static: false
 })
 
-const bkgimgh = 16 * forest_map.length
+canvas.width = 1024
+canvas.height = 50 * 16
+const bkgimgh = 16 * level.map.length
+
+const scaledCanvas = {
+    width: canvas.width / 4,
+    height: canvas.height / 4,
+}
 
 const camera = {
     position: {
-      x: 0,
+      x: -256,
       y: -bkgimgh + scaledCanvas.height,
     }
 }
 
-const background = new Sprite({
-    position: {
-        x: 0,
-        y: 0
-    },
-    imageSrc: './img/forest_map.png'
-})
+let background = current_map.image
 
 function animate() {
     window.requestAnimationFrame(animate)
@@ -72,6 +62,9 @@ function animate() {
             player.panDown({ canvas, camera })
         }
     }
+    if (player.velocity.x != 0) {
+        player.panHorizontal({ canvas, camera })
+    }
     
     c.restore()
 
@@ -80,13 +73,13 @@ function animate() {
         c.fillStyle = "white";
         c.textAlign = "center";
         c.fillText("You Win!", canvas.width/2, canvas.height/4);
-        return
+        // player.switchMap('level2')
     }
     
 
     
 }
 
-console.log(forest_map)
+console.log(level.map)
 
 animate()
